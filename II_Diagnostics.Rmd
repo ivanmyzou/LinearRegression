@@ -1,0 +1,162 @@
+---
+title: "II Diagnostics"
+author: ""
+date: ""
+output: html_document
+---
+
+```{r}
+set.seed(0)
+
+N <- 200 #number of samples
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-1)
+
+x1 <- runif(N)
+x2 <- runif(N)
+x3 <- runif(N)
+
+y <- 0.1*x1 - 2*x2 + 4*x3 + rnorm(N) #normal noises
+
+l <- lm(y ~ x1 + x2 + x3)
+
+plot(l)
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-1)
+
+x1 <- runif(N)
+x2 <- runif(N)
+x3 <- sort(runif(N))
+
+y <- x1 - 5*x2 + 50*x3 + 10 * x3 * rnorm(N) #normal noises with heteroscedasticity
+
+l <- lm(y ~ x1 + x2 + x3)
+
+plot(l)
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-1)
+
+x1 <- runif(N)
+x2 <- runif(N)
+x3 <- sort(runif(N))
+
+y <- x1 - x2 + 2*x3 + rgamma(N, 2, 10) #right skew
+
+l <- lm(y ~ x1 + x2 + x3)
+
+plot(l)
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-1)
+
+x1 <- runif(N)
+x2 <- runif(N)
+x3 <- sort(runif(N))
+
+y <- x1 - x2 + 2*x3 - rgamma(N, 2, 10) #left skew
+
+l <- lm(y ~ x1 + x2 + x3)
+
+plot(l)
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-0.5)
+
+y <- rgamma(N, 2, 5)
+qqnorm(y)
+qqline(y)
+title(sub = "right skew", font.sub = 4)
+
+y <- -rgamma(N, 2, 5)
+qqnorm(y)
+qqline(y)
+title(sub = "left skew", font.sub = 4)
+
+y <- rt(N, 2)
+qqnorm(y)
+qqline(y)
+title(sub = "platykurtic", font.sub = 4)
+
+y <- runif(N, -10, 10)
+qqnorm(y)
+qqline(y)
+title(sub = "leptokurtic", font.sub = 4)
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-1)
+
+x1 <- runif(N)
+x2 <- runif(N)
+x3 <- sort(runif(N))
+
+y <- 0.1*x1 - 2*x2 + 4*x3 + rnorm(N) #normal noises
+print(l$coefficients)
+
+# outlier (not following general trend)
+y <- c(y, 10)
+x1 <- c(x1, 0.5)
+x2 <- c(x2, 0.5)
+x3 <- c(x3, 0.5)
+
+l <- lm(y ~ x1 + x2 + x3)
+print(l$coefficients)
+
+plot(l)
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-1)
+
+x1 <- runif(N)
+x2 <- runif(N)
+x3 <- sort(runif(N))
+
+y <- 0.1*x1 - 2*x2 + 4*x3 + rnorm(N) #normal noises
+print(l$coefficients)
+
+# high leverage point (far from explanatory variable distribution cluster)
+x1 <- c(x1, 2)
+x2 <- c(x2, 2)
+x3 <- c(x3, 2)
+y <- c(y, 0.1*2 - 2*2 + 4*2)
+
+l <- lm(y ~ x1 + x2 + x3)
+print(l$coefficients)
+
+plot(l)
+```
+
+```{r}
+par(mfrow = c(2, 2), tcl=-1)
+
+x1 <- runif(N)
+x2 <- runif(N)
+x3 <- sort(runif(N))
+
+y <- 0.1*x1 - 2*x2 + 4*x3 + rnorm(N) #normal noises
+
+l <- lm(y ~ x1 + x2 + x3)
+print(l$coefficients)
+
+# high leverage point and outlier
+x1 <- c(x1, 3)
+x2 <- c(x2, 3)
+x3 <- c(x3, 3)
+y <- c(y, -5)
+
+l <- lm(y ~ x1 + x2 + x3)
+print(l$coefficients)
+
+plot(l)
+```
+
+
