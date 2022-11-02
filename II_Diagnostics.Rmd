@@ -2,7 +2,7 @@
 title: "II Diagnostics"
 author: ""
 date: ""
-output: html_document
+output: pdf_document
 ---
 
 ```{r}
